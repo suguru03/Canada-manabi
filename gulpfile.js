@@ -8,6 +8,6 @@ gulp.task('server', () => {
     .pipe(webserver({
       livereload: true,
       open: true,
-      fallback: './public/index.html'
+      fallback: '.index.html'
     }));
 });
