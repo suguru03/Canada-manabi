@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canada Manabi</title>
+    <meta charset="utf-8">
+    <meta name="title" content="Canada-Manabi">
+    <meta name="description" content="カナダで英語の勉強しながら色々まとめてます">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Canada-Manabi">
+    <meta property="og:description" content="カナダで英語の勉強しながら色々まとめてます">
+</head>
+<body>
+<div id="main">
+  <table border="1">
+    <tr><th></th><th>決済手数料</th></tr>
+    <tr><td>キャッシュパスポート</td><td>1.63%</td></tr>
+    <tr><td>MasterCard</td><td>1.63%</td></tr>
+    <tr><td>VISA</td><td>1.63%</td></tr>
+    <tr><td>JSB</td><td>1.60%</td></tr>
+    <tr><td>AMEX</td><td>2.00%</td></tr>
+  </table>
+  <div id="calculator">
+    <table border="0">
+      <tr><td>金額:$</td><td><input id="doller" value=0></input></td></tr>
+      <tr><td>為替レート</td><td><input id="rate" value=0.01086956521></input></td></tr>
+      <tr><td>手数料</td><td><input id="charge" value=1.63></input></td></tr>
+      <tr><td>キャッシュパスポート</td><td><input type="checkbox" id="fee" ></input></td></tr>
+      <tr><td>金額:円</td><td id="result">0</td></tr>
+    </table>
+  </div>
+  <p>注意事項</p>
+  <ul>
+    <li>キャッシュパスポートの入金手数料は1.00%</li>
+  </ul>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  var $doller = $('#doller');
+  var $rate = $('#rate');
+  var $charge = $('#charge');
+  var $fee = $('#fee');
+  var $result = $('#result');
+  var value = $doller.val();
+  var rate = $rate.val();
+  var charge = $charge.val();
+  var isCachePasport = $fee.prop('checked');
+  var display = function() {
+    var fee = isCachePasport ? 0.99 : 1.00;
+    var result = Math.ceil(value / (rate * (100 - charge) / 100 * fee));
+    result = (result + '').replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' );
+    $('#result').text(result);
+  };
+  $doller.on('change', function() {
+    value = $doller.val();
+    display();
+  });
+  $rate.on('change', function() {
+    rate = $rate.val();
+    display();
+  });
+  $charge.on('change', function() {
+    charge = $charge.val();
+    display();
+  });
+  $fee.on('change', function() {
+    isCachePasport = $fee.prop('checked');
+    display();
+  });
+</script>
+</html>
