@@ -62,6 +62,9 @@
       extra: 1.01
     }
   };
+  /**
+   * calculate
+   */
   var $doller = $('#doller');
   var $rate = $('#rate');
   var value = $doller.val();
@@ -84,5 +87,26 @@
     display();
   });
   display();
+  request();
+  /**
+   * get recent rate
+   */
+  function request() {
+    $.ajax({
+      url: 'https://currency-api.appspot.com/api/JPY/CAD.jsonp?amount=1.00&callback=json',
+      crossDomain: true,
+      dataType: 'jsonp',
+      success: function(data) {
+        var rate = data.rate;
+        if (rate) {
+          $rate.val(data.rate);
+          $rate.trigger('change');
+        }
+      },
+      error: function(err) {
+        console.error(err);
+      }
+    });
+  };
 </script>
 </html>
