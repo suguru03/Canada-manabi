@@ -19,6 +19,7 @@
   </div>
   <table border="1">
     <tr><th></th><th>決済手数料</th><th>金額</th></tr>
+    <tr><td>日本円換算</td><td>0%</td><td id="r_yen">0</td></tr>
     <tr><td>JCB</td><td>1.60%</td><td id="r_jcb">0</td></tr>
     <tr><td>MasterCard</td><td>1.63%</td><td id="r_master">0</td></tr>
     <tr><td>VISA</td><td>1.63%</td><td id="r_visa">0</td></tr>
@@ -31,7 +32,11 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-  var cardMap = {
+  const cardMap = {
+    yen: {
+      id: 'r_yen',
+      rate: 1
+    },
     jcb: {
       id: 'r_jcb',
       rate: 1.016
@@ -65,24 +70,24 @@
   /**
    * calculate
    */
-  var $doller = $('#doller');
-  var $rate = $('#rate');
-  var value = $doller.val();
-  var rate = $rate.val();
-  var display = function() {
-    for (var key in cardMap) {
-      var data = cardMap[key];
-      var r = data.rate * (data.extra || 1);
-      var result = Math.ceil(value * r / rate);
+  const $doller = $('#doller');
+  const $rate = $('#rate');
+  let value = $doller.val();
+  let rate = $rate.val();
+  const display = () => {
+    for (const key in cardMap) {
+      const data = cardMap[key];
+      const r = data.rate * (data.extra || 1);
+      let result = Math.ceil(value * r / rate);
       result = (result + '').replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' );
       $('#' + data.id).text(result);
     }
   };
-  $doller.on('change', function() {
+  $doller.on('change', () => {
     value = $doller.val();
     display();
   });
-  $rate.on('change', function() {
+  $rate.on('change', () => {
     rate = $rate.val();
     display();
   });
@@ -96,16 +101,14 @@
       url: 'https://currency-api.appspot.com/api/JPY/CAD.jsonp?amount=1.00&callback=json',
       crossDomain: true,
       dataType: 'jsonp',
-      success: function(data) {
-        var rate = data.rate;
+      success: data => {
+        const rate = data.rate;
         if (rate) {
           $rate.val(data.rate);
           $rate.trigger('change');
         }
       },
-      error: function(err) {
-        console.error(err);
-      }
+      error: err => console.error(err)
     });
   };
 </script>
