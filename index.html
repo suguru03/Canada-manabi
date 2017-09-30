@@ -18,14 +18,15 @@
     </table>
   </div>
   <table border="1">
-    <tr><th></th><th>決済手数料</th><th>金額</th></tr>
+    <tr style="background: #CCC"><th></th><th>決済手数料</th><th>金額</th></tr>
     <tr><td>日本円換算</td><td>0%</td><td id="r_yen">0</td></tr>
-    <tr><td>JCB</td><td>1.60%</td><td id="r_jcb">0</td></tr>
+    <tr style="background: #EEE"><td>JCB</td><td>1.60%</td><td id="r_jcb">0</td></tr>
     <tr><td>MasterCard</td><td>1.63%</td><td id="r_master">0</td></tr>
-    <tr><td>VISA</td><td>1.63%</td><td id="r_visa">0</td></tr>
+    <tr style="background: #EEE"><td>VISA</td><td>1.63%</td><td id="r_visa">0</td></tr>
     <tr><td>AMEX</td><td>2.00%</td><td id="r_amex">0</td></tr>
+    <tr style="background: #EEE"><td>新生銀行(スタンダード)</td><td>0.50円/$+4000円</td><td id="r_shinsei">0</td></tr>
     <tr><td>VISAデビット</td><td>1.63%+3.0%</td><td id="r_visa_d">0</td></tr>
-    <tr><td>シティバンク</td><td>1.63%+5.0%</td><td id="r_city">0</td></tr>
+    <tr style="background: #EEE"><td>シティバンク</td><td>1.63%+5.0%</td><td id="r_city">0</td></tr>
     <tr><td>キャッシュパスポート</td><td>1.63%+5.5%+振込手数料1%</td><td id="r_cache_p">0</td></tr>
   </table>
 </div>
@@ -53,6 +54,11 @@
       id: 'r_amex',
       rate: 1.02
     },
+    shinsei: {
+      id: 'r_shinsei',
+      rate: 1,
+      charge: doller => doller * 0.5 + 4000
+    },
     visaDebit: {
       id: 'r_visa_d',
       rate: 1.0163 * 1.03
@@ -79,6 +85,9 @@
       const data = cardMap[key];
       const r = data.rate * (data.extra || 1);
       let result = Math.ceil(value * r / rate);
+      if (data.charge) {
+        result += Math.ceil(data.charge(value));
+      }
       result = (result + '').replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' );
       $('#' + data.id).text(result);
     }
